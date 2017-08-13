@@ -19,6 +19,9 @@ trainingData = """
 		Albania, Macedonia;
 		Albania, Montenegro;
 
+		Andorra, France;
+		Andorra, Spain;
+
 		Austria, Czechia;
 		Austria, Germany;
 		Austria, Hungary;
@@ -26,6 +29,7 @@ trainingData = """
 		Austria, Slovakia;
 		Austria, Slovenia;
 		Austria, Switzerland;
+		Austria, Liechtenstein;
 
 		Belarus, Latvia;
 		Belarus, Lithuania;
@@ -35,6 +39,7 @@ trainingData = """
 
 		Belgium, France;
 		Belgium, Germany;
+		Belgium, Luxembourg;
 		Belgium, Netherlands;
 
 		Bosnia, Croatia;
@@ -67,9 +72,12 @@ trainingData = """
 		Finland, Russia;
 		Finland, Sweden;
 
+		France, Andorra;
 		France, Belgium;
 		France, Germany;
 		France, Italy;
+		France, Luxembourg;
+		France, Monaco;
 		France, Spain;
 		France, Switzerland;
 
@@ -78,6 +86,7 @@ trainingData = """
 		Germany, Czechia;
 		Germany, Denmark;
 		Germany, France;
+		Germany, Luxembourg;
 		Germany, Netherlands;
 		Germany, Poland;
 		Germany, Switzerland;
@@ -99,6 +108,7 @@ trainingData = """
 
 		Italy, Austria;
 		Italy, France;
+		Italy, San_Marino;
 		Italy, Slovenia;
 		Italy, Switzerland;
 
@@ -116,6 +126,13 @@ trainingData = """
 		Lithuania, Latvia;
 		Lithuania, Poland;
 
+		Liechtenstein, Austria;
+		Liechtenstein, Switzerland;
+
+		Luxembourg, Belgium;
+		Luxembourg, France;
+		Luxembourg, Germany;
+
 		Macedonia, Albania;
 		Macedonia, Bulgaria;
 		Macedonia, Greece;
@@ -124,6 +141,8 @@ trainingData = """
 
 		Moldova, Romania;
 		Moldova, Ukraine;
+
+		Monaco, France;
 
 		Montenegro, Albania;
 		Montenegro, Bosnia;
@@ -159,6 +178,8 @@ trainingData = """
 		Russia, Norway;
 		Russia, Ukraine;
 
+		San_Marino, Italy;
+
 		Serbia, Bosnia;
 		Serbia, Bulgaria;
 		Serbia, Croatia;
@@ -179,6 +200,7 @@ trainingData = """
 		Slovenia, Hungary;
 		Slovenia, Italy;
 
+		Spain, Andorra;
 		Spain, France;
 		Spain, Portugal;
 
@@ -190,6 +212,7 @@ trainingData = """
 		Switzerland, France;
 		Switzerland, Germany;
 		Switzerland, Italy;
+		Switzerland, Liechtenstein;
 
 		Ukraine, Belarus;
 		Ukraine, Hungary;

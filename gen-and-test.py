@@ -44,12 +44,12 @@ def main():
 			t.join()
 		variations = []
 		while not res_queue.empty():
-			i, rule, coverage = res_queue.get()
-			if coverage > 0.7:
+			i, rule, accuracy = res_queue.get()
+			if accuracy > 0.7:
 				foundRules += 1
-				print("Potential rule found: (%d %% coverage)" % (coverage*100))
+				print("Potential rule found: (%d %% accuracy)" % (accuracy*100))
 				print('[%d] %s' % (i, str(rule)), end="\n*********\n")
-			if coverage > 0.4:
+			if accuracy > 0.4:
 				variations = refiner.vary_constants(i)
 		rules = variations + refiner.specialize(index)
 		index+=1
@@ -65,12 +65,12 @@ def checkRule(result_queue, index, rule, training_data):
 		result_queue.put((index, rule, 0))
 		return
 
-	covered = re.search("Correct = { (.*) }", output).group(1)
+	hit = re.search("Correct = { (.*) }", output).group(1)
 	missed = re.search("Different = { (.*) }", output).group(1)
-	covercount = 0 if covered == '' else len(covered.split("; "))
+	hitcount = 0 if hit == '' else len(hit.split("; "))
 	misscount = 0 if missed == '' else len(missed.split("; "))
-	coverage = covercount / (covercount + misscount)
-	result_queue.put((index, rule, coverage))
+	accuracy = (2 * hitcount) / (2 * hitcount + misscount)
+	result_queue.put((index, rule, accuracy))
 
 # Check whether a rule is a tautology, e.g. p(x) <- p(x)
 # These rules are obvious and do not actually need to be tested
@@ -83,7 +83,7 @@ def checkTautology(r):
 
 skeleton = """
 vocabulary V {
-	type Country constructed from {Albania, Austria, Belarus, Belgium, Bosnia, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Kosovo, Latvia, Lithuania, Macedonia, Malta, Moldova, Montenegro, Netherlands, Norway, Poland, Portugal, Romania, Russia, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Ukraine, United_Kingdom}
+	type Country constructed from {Albania, Andorra, Austria, Belarus, Belgium, Bosnia, Bulgaria, Croatia, Cyprus, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Kosovo, Latvia, Liechtenstein, Lithuania, Luxembourg, Macedonia, Malta, Moldova, Monaco, Montenegro, Netherlands, Norway, Poland, Portugal, Romania, Russia, San_Marino, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Ukraine, United_Kingdom}
 	Neighbour(Country, Country)
 	Island(Country)
 	ApproxIsland(Country)

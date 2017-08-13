@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import data_family as dummy
+import data_example_inductive as dummy
 from refiner import *
 import subprocess
 import threading
@@ -10,17 +10,19 @@ filename = "tmp%d.idp"
 timeout = 2
 
 def main():
-	parent = Pred("Parent", 2)
-	ancestor = Pred("Ancestor", 2)
-	refiner = Refiner(parent, ancestor)
+	odd = Pred("Odd", 1)
+	even = Pred("Even", 1)
+	iszero = Pred("IsZero", 1)
+	plustwo = Pred("PlusTwo", 2)
+	refiner = Refiner(odd, even, iszero, plustwo)
 	refiner.max_atoms = 2
 	refiner.do_aggregates = False
 	refiner.do_inductive_definitions = True
-	rules = [refiner.generate_rule(1)] # the 1 means we try to define ancestor, the second predicate.
+	rules = [refiner.generate_rule(1)] # the 1 means we try to define even, the first predicate.
 	foundRules = 0
 	index = 0
 	checked_rules = set()
-	while foundRules < 2:
+	while foundRules < 5:
 		res_queue = queue.Queue()
 		threads = []
 		for i, rule in enumerate(rules):
@@ -80,22 +82,23 @@ def checkTautology(r):
 
 skeleton = """
 vocabulary V {
-	type Person constructed from {Filip, Mathilde, Albert_II, Paola, Boudewijn, Fabiola, Astrid, Leopold_III, Albert_I, Elisabeth, Juliana, Bernhard, Beatrix, Claus, Willem_Alexander, Maxima, Catharina}
-	Parent(Person, Person)
-	Ancestor(Person, Person)
-	ApproxAncestor(Person, Person)
-	Different(Person, Person)
-	Correct(Person, Person)
+	type Number constructed from {Zero, One, Two, Three, Four, Five, Six, Seven}
+	IsZero(Number)
+	Odd(Number)
+	Even(Number)
+	PlusOne(Number, Number)
+	PlusTwo(Number, Number)
+	ApproxEven(Number)
+	Different(Number)
+	Correct(Number)
 }
 
 theory T: V {
 	{
 		%s
-		! x y: Different(x, y) <- (ApproxAncestor(x, y) & ~Ancestor(x, y)) | (~ApproxAncestor(x, y) & Ancestor(x, y)).
-		! x y: Correct(x, y) <- ApproxAncestor(x, y) & Ancestor(x, y).
+		! x: Different(x) <- (ApproxEven(x) & ~Even(x)) | (~ApproxEven(x) & Even(x)).
+		! x : Correct(x) <- ApproxEven(x) & Even(x).
 	}
-	// ! x y: Parent(x,y) => x ~= y.
-	// ! x y: Ancestor(x,y) => x ~= y.
 }
 
 structure S:V {

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import data_family as dummy
+import data_example as dummy
 from refiner import *
 import subprocess
 import threading
@@ -10,12 +10,14 @@ filename = "tmp%d.idp"
 timeout = 2
 
 def main():
-	parent = Pred("Parent", 2)
-	ancestor = Pred("Ancestor", 2)
-	refiner = Refiner(parent, ancestor)
+	man = Pred("Man", 1)
+	bird = Pred("Bird", 1)
+	mortal = Pred("Mortal", 1)
+	flies = Pred("Flies", 1)
+	refiner = Refiner(man, bird, mortal, flies)
 	refiner.max_atoms = 2
 	refiner.do_aggregates = False
-	refiner.do_inductive_definitions = True
+	refiner.do_inductive_definitions = False
 	rules = [refiner.generate_rule(1)] # the 1 means we try to define ancestor, the second predicate.
 	foundRules = 0
 	index = 0
@@ -44,7 +46,7 @@ def main():
 			t.join()
 		while not res_queue.empty():
 			i, rule, accuracy = res_queue.get()
-			if accuracy > 0.7:
+			if accuracy >= 0.6:
 				foundRules += 1
 				print("Potential rule found: (%d %% accuracy)" % (accuracy*100))
 				print('[%d] %s' % (i, str(rule)), end="\n*********\n")
@@ -80,22 +82,22 @@ def checkTautology(r):
 
 skeleton = """
 vocabulary V {
-	type Person constructed from {Filip, Mathilde, Albert_II, Paola, Boudewijn, Fabiola, Astrid, Leopold_III, Albert_I, Elisabeth, Juliana, Bernhard, Beatrix, Claus, Willem_Alexander, Maxima, Catharina}
-	Parent(Person, Person)
-	Ancestor(Person, Person)
-	ApproxAncestor(Person, Person)
-	Different(Person, Person)
-	Correct(Person, Person)
+	type Creature constructed from {Tweety, Tux, Socrates, Plato, Aristotle}
+	Mortal(Creature)
+	Flies(Creature)
+	Bird(Creature)
+	Man(Creature)
+	ApproxBird(Creature)
+	Different(Creature)
+	Correct(Creature)
 }
 
 theory T: V {
 	{
 		%s
-		! x y: Different(x, y) <- (ApproxAncestor(x, y) & ~Ancestor(x, y)) | (~ApproxAncestor(x, y) & Ancestor(x, y)).
-		! x y: Correct(x, y) <- ApproxAncestor(x, y) & Ancestor(x, y).
+		! x: Different(x) <- (ApproxBird(x) & ~Bird(x)) | (~ApproxBird(x) & Bird(x)).
+		! x : Correct(x) <- ApproxBird(x) & Bird(x).
 	}
-	// ! x y: Parent(x,y) => x ~= y.
-	// ! x y: Ancestor(x,y) => x ~= y.
 }
 
 structure S:V {
